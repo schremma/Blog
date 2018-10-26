@@ -1,0 +1,56 @@
+﻿@model Blog.ViewModels.PostViewModel
+
+@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    ViewBag.Title = "Create";
+}
+
+<h2>New post</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+
+    <div class="formdiv">
+
+        @Html.ValidationSummary(true)
+
+        <div>
+            @Html.LabelFor(model => model.Post.Titel)
+
+            @Html.EditorFor(model => model.Post.Titel)
+            @Html.ValidationMessageFor(model => model.Post.Titel)
+
+        </div>
+
+        <div>
+            @Html.LabelFor(model => model.Post.Content)
+
+            @Html.EditorFor(model => model.Post.Content)
+            @Html.ValidationMessageFor(model => model.Post.Content)
+
+        </div>
+
+        <div>
+            @Html.LabelFor(model => model.Post.Status, new { @class = "control-label col-md-2" })
+            @Html.DropDownListFor(model => model.Post.Status, Model.PostStatus, "[Please select]")
+            @Html.ValidationMessageFor(model => model.Post.Status)
+        </div>
+
+
+        <div class="no-border">
+
+            <input type="submit" name="button" value="Save" class="more" />
+
+        </div>
+    </div>
+}
+
+<div class="link">
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

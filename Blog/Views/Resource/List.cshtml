@@ -1,0 +1,18 @@
+﻿@model IEnumerable<Blog.Models.Resource>
+
+
+<div class="resources no-border">
+    @{
+        string text = "Resource";
+        <h4>Get linked files:</h4>
+                    foreach(var item in Model)
+                    {
+                        if (!string.IsNullOrEmpty(item.Description))
+                        {
+                            text = item.Description;
+                        }
+                            @Html.ActionLink(text, "GetFile", "Resource", new { id = item.Id }, new {@class="link"})
+                                <br />
+                    }
+    }
+</div>

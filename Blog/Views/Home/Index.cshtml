@@ -1,0 +1,52 @@
+﻿@model IEnumerable<Blog.Models.Post>
+
+@{
+    ViewBag.Title = "Home Page";
+}
+
+@if (Model.Count()== 0)
+{
+    <h3>There are no posts to display</h3>
+}
+
+    @foreach(var item in Model)
+    { 
+    <article class="post">
+
+        <div class="primary">
+
+            <h2>@item.Titel</h2>
+
+
+            <div class="image-section">
+
+            </div>
+
+            <div>
+                <p>@Html.Raw(@Html.Truncate(@item.Content, 600))</p>             
+            </div>
+
+            <p>@Html.ActionLink("Continue reading", "Details", new {id=item.Id}, new { @class = "more" })  </p>
+
+        </div>
+
+        <aside>
+
+            <p class="dateinfo">@item.PublishDate.Value.ToString("MMM")<span>@item.PublishDate.Value.Day.ToString()</span></p>
+
+            <div class="post-meta">
+                <h4>Post Info</h4>
+                <ul>
+                    <li class="user">@item.Author.UserName</li>
+                    <li class="time">@item.PublishDate.Value.ToShortTimeString()</li>
+                    <li class="comment">@item.Comments.Where(c => c.Approved == true).Count() Comments</li>
+                </ul>
+            </div>
+
+        </aside>
+
+    </article>
+    }
+  
+
+

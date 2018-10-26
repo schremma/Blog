@@ -1,0 +1,48 @@
+﻿@model IEnumerable<Blog.Models.Comment>
+
+
+
+ @helper DisplayCommentTree(IEnumerable<Blog.Models.Comment> comments)
+{
+
+    foreach (var comment in comments)
+    {
+        <li class="depth-2">
+            <div class="comment-info">
+                <cite>
+                    <img class="avatar" width="42" height="42" src="~/content/images/gravatar.jpg" alt="">
+                    @Html.DisplayFor(modelItem => comment.ApplicationUser.UserName)
+                    says:
+                    <br />
+                    <span class="comment-data">
+                        @Html.DisplayFor(modelItem => comment.CreateDate)
+                    </span>
+                </cite>
+            </div>
+            <div class="comment-text">
+                <p>@Html.DisplayFor(modelItem => comment.Content)</p>
+                <div class="reply">
+                    @Ajax.ActionLink("Reply", "Create", new { parentId = comment.Id, postId = comment.PostId, requestUrl = Request.RawUrl }, new AjaxOptions() { UpdateTargetId = "commentInput", OnSuccess = "JumpToComment" })
+                </div>
+            </div>
+            @{
+        var children = Model.Where(c => c.ParentComment == comment).OrderByDescending(c => c.CreateDate);
+        if (children.Count() > 0)
+        {
+            <ul class="children">
+                @DisplayCommentTree(children)
+            </ul>
+        }
+            }
+        </li>
+    }
+}
+
+    <h4>Comments</h4>
+<div class="primary">
+
+    <ol class=commentlist>
+        @DisplayCommentTree(Model.Where(c => c.ParentComment == null).OrderByDescending(c => c.CreateDate))
+    </ol>
+</div>
+

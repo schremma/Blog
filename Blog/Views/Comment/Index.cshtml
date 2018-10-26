@@ -1,0 +1,93 @@
+﻿@model IEnumerable<Blog.Models.Comment>
+
+@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    ViewBag.Title = "Comments";
+}
+
+
+<h2>Comments</h2>
+
+<div>
+    @Html.ActionLink("Go to posts", "Index", "Post")
+</div>
+
+<div id="list">
+    <table class="table">
+
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ApplicationUser.UserName)
+            </th>
+            <th>
+                <label>Post</label>
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Content)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CreateDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Approved)
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+
+            int i = item.Id;
+
+            AjaxOptions options = new AjaxOptions();
+            options.HttpMethod = "Post";
+            options.UpdateTargetId = string.Format("tr{0}", i);
+            options.InsertionMode = InsertionMode.Replace;
+
+            string command = item.Approved ? "Unapprove" : "Approve";
+
+            <tr id=@string.Format("tr{0}", i)>
+                <td>
+                    <a href="mailto:@item.Email">@Html.DisplayFor(modelItem => item.ApplicationUser.UserName)</a>
+                    
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Post.Titel)
+                    @if(item.Post.Status == Blog.Models.PostStatus.draft)
+                    {
+                        <span> - draft</span> 
+                    }
+                    @if (item.ParentCommentId != null)
+                    {
+                        string replyText = string.Format("(As a reply to: {0} {1})", item.ParentComment.ApplicationUser.UserName, item.ParentComment.CreateDate);
+                        <br />
+                        @Html.ActionLink(replyText, "Details", new { id = item.ParentComment.Id })
+                    }
+                </td>
+                <td>
+                    @Html.Truncate(item.Content, 200)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CreateDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Approved)
+                </td>
+                <td>
+                    @Ajax.ActionLink(command, "Approve", new { id = item.Id }, options) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.Id }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.Id })
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>
+
+<div>
+    @Html.ActionLink("Go to posts", "Index", "Post")
+</div>
+
+    @section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+    }

@@ -1,0 +1,14 @@
+﻿@model IEnumerable<Blog.Models.Post>
+
+<h3>Most Popular</h3>
+<ul>
+    @foreach(var item in Model)
+    { 
+    <li>
+        @Html.ActionLink(item.Titel, "Details", new { id = item.Id }) 
+        <span class="populardate">Posted on @item.PublishDate.Value.ToString("MMMM d, yyyy")</span>
+    </li>
+    }
+ 
+</ul>
+

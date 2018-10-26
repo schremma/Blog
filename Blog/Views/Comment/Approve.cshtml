@@ -1,0 +1,50 @@
+﻿@model Blog.Models.Comment
+
+
+
+@{
+    int i = Model.Id;
+
+    AjaxOptions options = new AjaxOptions();
+    options.HttpMethod = "Post";
+    options.UpdateTargetId = string.Format("tr{0}", i);
+    options.InsertionMode = InsertionMode.Replace;
+
+    string command = Model.Approved ? "Unapprove" : "Approve";
+
+        <td>
+            <a href="mailto:@Model.Email">@Html.DisplayFor(model=> Model.ApplicationUser.UserName)</a>
+        </td>
+        <td>
+            @Html.DisplayFor(model => Model.Post.Titel)
+            @if (Model.Post.Status == Blog.Models.PostStatus.draft)
+            {
+                <span> - draft</span>
+            }
+            @if (Model.ParentCommentId != null)
+            {
+                string replyText = string.Format("(As a reply to: {0} {1})", Model.ParentComment.ApplicationUser.UserName, Model.ParentComment.CreateDate);
+                <br />
+                @Html.ActionLink(replyText, "Details", new { id = Model.ParentComment.Id })
+            }
+        </td>
+        <td>
+            @Html.Truncate(Model.Content, 200)
+        </td>
+        <td>
+            @Html.DisplayFor(model => Model.CreateDate)
+        </td>
+        <td>
+            @Html.DisplayFor(model => Model.Approved)
+        </td>
+
+        <td>
+            @Ajax.ActionLink(command, "Approve", new { id = Model.Id }, options) |
+            @Ajax.ActionLink("Delete", "Delete", new { id = Model.Id }, new AjaxOptions() { UpdateTargetId = "list" }) |
+            @Html.ActionLink("Details", "Details", new { id = Model.Id })
+        </td>
+}
+
+
+
+

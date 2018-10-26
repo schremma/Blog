@@ -1,0 +1,54 @@
+﻿@model IEnumerable<Blog.Models.Resource>
+
+
+@{
+    ViewBag.Title = "Resources";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h2>Resources added to post</h2>
+
+<div id="postResources">
+    @using (Ajax.BeginForm(new AjaxOptions()
+    {
+        Url = Url.Action("Delete"),
+        UpdateTargetId = "postResources"
+}))
+{
+    @Html.AntiForgeryToken()
+        
+        <table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.ContentType)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FileName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Description)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.ContentType)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.FileName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Description)
+        </td>
+        <td>
+            <input type="submit" value="Delete" class="btn btn-default" /> 
+        </td>
+    </tr>
+}
+
+</table>
+    }
+</div>
+

@@ -1,0 +1,41 @@
+﻿@model Blog.ViewModels.CommentViewModel
+
+
+<div class="primary no-border">
+    <label class="message">@Model.CommentStatusMesssage</label>
+</div>
+
+@using (Ajax.BeginForm(new AjaxOptions() {
+    Url = Url.Action("Create"),
+    UpdateTargetId = "commentInput",
+    OnSuccess = "JumpToComment"
+}))
+{
+    @Html.AntiForgeryToken()
+    
+        <h4>Leave a comment</h4>
+
+           <div class="primary no-border formdiv">
+               <div>
+                   <label>Your comment</label>
+                   <label>@Model.ResponseToMessage</label>
+                   @Html.EditorFor(model => model.Comment.Content)
+                   @Html.ValidationMessageFor(model => model.Comment.Content)
+               </div>
+
+
+               <div>
+                   <label>Email Address</label>
+
+                   @Html.EditorFor(model => model.Comment.Email)
+                   @Html.ValidationMessageFor(model => model.Comment.Email)
+                   @Html.HiddenFor(model => model.Comment.ParentCommentId)
+                   @Html.HiddenFor(model => model.Comment.PostId)
+               </div>
+               
+               <div class="no-border">
+                   <input type="submit" value="Submit comment" class="more" />
+               </div>
+</div>
+}
+

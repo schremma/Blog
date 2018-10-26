@@ -1,0 +1,73 @@
+﻿@model Blog.ViewModels.PostViewModel
+
+@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    ViewBag.Title = "Edit";
+}
+
+
+<h2>Edit post</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="formdiv">
+
+        @Html.ValidationSummary(true)
+        @Html.HiddenFor(model => model.Post.Id)
+
+        <div>
+            @Html.LabelFor(model => model.Post.Titel)
+
+            @Html.EditorFor(model => model.Post.Titel)
+            @Html.ValidationMessageFor(model => model.Post.Titel)
+
+        </div>
+
+        <div>
+            @Html.LabelFor(model => model.Post.Content)
+
+            @Html.EditorFor(model => model.Post.Content)
+            @Html.ValidationMessageFor(model => model.Post.Content)
+
+        </div>
+
+        <div>
+            @Html.LabelFor(model => model.Post.CreateDate)
+            @Html.DisplayFor(model => model.Post.CreateDate)
+            <input type="hidden" name="createdate" value="@Model.Post.CreateDate" />
+        </div>
+
+
+        <div>
+            @Html.LabelFor(model => model.Post.Status)
+            @Html.DropDownListFor(model => model.Post.Status, Model.PostStatus, "[Please select]")
+            @Html.ValidationMessageFor(model => model.Post.Status)
+
+            @if (Model.Post.PublishDate != null)
+            {
+                @Html.HiddenFor(model => model.Post.PublishDate)
+            }
+        </div>
+
+        <div>
+            <label>Resources: @Model.Post.Resources.Count() item(s)</label>
+            @Html.ActionLink("Manage resources", "ToPost", "Resource", new { postId = Model.Post.Id }, new { @class = "link" })
+        </div>
+
+        <div class="no-border">
+
+            <input type="submit" name="button" value="Save" class="more" />
+
+        </div>
+    </div>
+}
+
+<div class="link">
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

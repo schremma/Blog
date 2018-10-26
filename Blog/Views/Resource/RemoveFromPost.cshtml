@@ -1,0 +1,29 @@
+﻿@model Blog.ViewModels.ResourceOfPostViewModel
+
+@{
+    ViewBag.Title = "Remove From Post";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h3>Are you sure you want to remove this resource from post?</h3>
+
+
+<div>
+    <label>File Name: @Model.Resource.FileName</label>
+</div>
+
+<div>
+    <label>Mime type: @Model.Resource.ContentType</label>
+</div>
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="id" value="@Model.Resource.Id" />
+<input type="hidden" name="postId" value="@Model.PostId" />
+<input type="submit" value="Remove from post" class="more"/>
+}
+
+
+

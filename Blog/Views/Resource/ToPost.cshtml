@@ -1,0 +1,77 @@
+﻿@model Blog.ViewModels.ResourcesToPostViewModel
+
+@{
+    ViewBag.Title = "Resources";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+@if(Model.Resources.Count() > 0)
+{ 
+
+<h3>Add resource to post</h3>
+
+using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Resources.First().ContentType)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Resources.First().FileName)
+        </th>
+        <th>
+           @Html.DisplayNameFor(model => model.Resources.First().Description)
+        </th>
+        <th>
+            Link to post
+        </th>
+    </tr>
+
+    @foreach (var item in Model.Resources)
+    {
+        bool added = item.Posts.Any(p => p.Id == Model.PostId);
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ContentType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FileName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @if (added)
+                {
+                    @Html.ActionLink("Remove from post", "RemoveFromPost", "Resource", new { id = item.Id, postId = Model.PostId }, new { @class = "link" });
+                }
+                else
+                {
+                    <span>Add:</span>
+                    <input type="checkbox" name="add" value="@item.Id" class="form-checkbox"/>
+                }
+
+            </td>
+        </tr>
+    }
+
+</table>
+    <div>
+        <input type="submit" name="button" value="Add selected" class="more" />
+    </div>
+
+}
+}
+
+@if (Model.Resources.Count() < 1)
+{
+    <h3>There are no resources available</h3>
+}
+
+<div class="link">
+    @Html.ActionLink("Back to post", "Edit", "Post", new { id = Model.PostId }, new { @class = "link" })
+</div>
+

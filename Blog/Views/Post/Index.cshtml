@@ -1,0 +1,82 @@
+﻿@model IEnumerable<Blog.Models.Post>
+
+
+@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    ViewBag.Title = "My posts";
+}
+
+<h2>My posts</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Titel)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CreateDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Status)
+        </th>
+        <th>
+            <label>Comments</label>
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Titel)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CreateDate)
+            @if (item.ModifyDate != null)
+            {
+                <br />
+    <span>
+        Last modified: 
+        @Html.DisplayFor(modelItem => item.ModifyDate)
+    </span>
+            }
+            @if (item.PublishDate != null)
+            {
+                <br />
+                <span>
+                    Published:
+                    @Html.DisplayFor(modelItem => item.PublishDate)
+                </span>
+            }
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Status)
+        </td>
+        <td>
+            @item.Comments.Count()
+            @if (item.Comments.Where(c => c.Approved == false).Count() > 0)
+{
+    <span>
+        (@Html.ActionLink("Pending:", "Index", "Comment", new { postId = item.Id, pending = true }, new { @class = "link" })
+        @item.Comments.Where(c => c.Approved == false).Count())
+    </span>
+            <br />
+            }
+            @if (item.Comments.Count() > 0)
+            {
+                @Html.ActionLink("Go to comments", "Index", "Comment", new { postId = item.Id }, new { @class = "link" })
+            }
+                     
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
+            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+        </td>
+    </tr>
+}
+
+</table>

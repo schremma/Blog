@@ -1,0 +1,58 @@
+﻿@model Blog.Models.Post
+
+@{
+    ViewBag.Title = Model.Titel;
+}
+
+    
+
+    <article class="post single">
+        <div class="primary">
+            <h2>@Model.Titel</h2>
+
+            <div>
+                <p>@Html.Raw(Model.Content)</p>
+            </div>
+            @if (@Model.Resources.Count > 0)
+            {
+                @Html.Action("List", "Resource", new { postId = Model.Id })
+            }
+        </div>
+        <aside>
+
+            <p class="dateinfo">@Model.PublishDate.Value.ToString("MMM")<span>@Model.PublishDate.Value.Day.ToString()</span></p>
+
+            <div class="post-meta">
+                <h4>Post Info</h4>
+                <ul>
+                    <li class="user">@Model.Author.UserName</li>
+                    <li class="time">@Model.PublishDate.Value.ToShortTimeString()</li>
+                    <li class="comment">@Model.Comments.Where(c => c.Approved == true).Count() Comments</li>
+                </ul>
+            </div>
+        </aside>
+    </article>
+
+<div class="post-bottom-section">
+    @Html.Action("CommentsForPost", "Comment", new {postId = Model.Id})
+</div>
+
+<div class="post-bottom-section" id="commentInput">
+    @Html.Action("Create", "Comment", new { postId = Model.Id})
+</div>
+
+<div>
+    @Html.ActionLink("Back to posts", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+<script>
+    function JumpToComment() {
+        var anchor = document.getElementById("commentInput");
+        anchor.scrollIntoView(true);
+    }
+
+</script>
